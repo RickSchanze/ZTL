@@ -24,7 +24,22 @@ ZTL是一个小型的标准库，目标是通过造轮子来提高数据结构�
 | ---------- | ------------------------------------------------------------ |
 | googletest | [google/googletest: GoogleTest - Google Testing and Mocking Framework (github.com)](https://github.com/google/googletest) |
 
+# 食用方法
 
+运行环境为windows,g++11.2
 
+首先运行
 
+`git clone https://github.com/RickSchanze/ZTL.git`
 
+在项目文件夹内运行
+
+`cmake -G "Unix Makefiles" -S . -B build`
+
+`cd build`
+
+`make`
+
+`ctest`
+
+即可运行测试
