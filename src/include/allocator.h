@@ -9,7 +9,7 @@
 #include <memory>
 namespace ztl {
 template <class T>
-struct Allocator {
+struct allocator {
   using value_type      = T;
   using size_type       = std::size_t;
   using difference_type = std::ptrdiff_t;
@@ -27,7 +27,7 @@ struct Allocator {
 };
 
 template <class A>
-struct AllocatorTraits {
+struct allocator_traits {
   using allocator_type = A;
   using value_type     = typename allocator_type::value_type;
   using pointer        = typename allocator_type::pointer;

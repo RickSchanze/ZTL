@@ -6,8 +6,8 @@
 #include <vector>
 
 TEST(TestAllocator, TestFreeUsage) {
-  ztl::Allocator<int> alloc;
-  constexpr ztl::AllocatorTraits<ztl::Allocator<int>> traits;
+  ztl::allocator<int> alloc;
+  constexpr ztl::allocator_traits<ztl::allocator<int>> traits;
   auto p = traits.allocate(alloc, 10);
   for (int i = 0; i < 10; ++i) {
     traits.construct(alloc, p + i, i);
@@ -18,7 +18,7 @@ TEST(TestAllocator, TestFreeUsage) {
 }
 
 TEST(TestAllocator, TestStdVector) {
-  std::vector<int, ztl::Allocator<int>> vec;
+  std::vector<int, ztl::allocator<int>> vec;
   for (int i = 0; i < 10; ++i) {
     vec.push_back(i);
   }
