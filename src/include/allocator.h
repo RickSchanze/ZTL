@@ -21,8 +21,8 @@ struct allocator {
   constexpr void deallocate(value_type* value, size_type n) {
     std::free(value);
   }
-  constexpr Allocator() {
-    static_assert(concepts::IsAllocator<value_type, Allocator<value_type>>);
+  constexpr allocator() {
+    static_assert(concepts::IsAllocator<value_type, allocator<value_type>>);
   }
 };
 

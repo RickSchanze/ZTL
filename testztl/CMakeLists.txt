@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(ztl_test)
 find_package(GTest)
 add_executable(ztl_test
-        test_allocator.cpp test_iterator.cpp)
+        test_allocator.cpp
+        test_iterator.cpp)
 target_link_libraries(ztl_test gtest gtest_main)
 target_link_libraries(ztl_test ztl_src)
 target_include_directories(ztl_test PUBLIC ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})

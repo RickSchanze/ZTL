@@ -47,3 +47,40 @@ TEST(TestIterator, TestPrev) {
   iter = ztl::prev(iter, -1);
   EXPECT_EQ(*iter, 5);
 }
+
+TEST(TestReverseIterator, TestCreate) {
+  std::vector vec{1, 2, 3, 4, 5, 6};
+  auto iter = vec.end() - 1;
+  ztl::reverse_iterator rit{iter};
+  EXPECT_EQ(*rit, 5);
+  iter -= 2;
+  ztl::reverse_iterator rit2{iter};
+  EXPECT_EQ(*rit2, 3);
+  ztl::reverse_iterator rit3{rit2};
+  EXPECT_EQ(*rit3, 3);
+}
+
+TEST(TestReverseIterator, TestMathOperation) {
+  std::vector vec{1, 2, 3, 4, 5, 6};
+  auto iter = vec.end();
+  ztl::reverse_iterator rit1{iter};
+  auto rit2 = rit1 + 2;
+  EXPECT_EQ(*rit2, 4);
+  EXPECT_EQ(*rit1, 6);
+  rit1 += 2;
+  EXPECT_EQ(*rit1, 4);
+  ztl::reverse_iterator rit3{vec.begin() + 1};
+  EXPECT_EQ(*rit3, 1);
+  auto rit4 = rit3 - 3;
+  EXPECT_EQ(*rit4, 4);
+  rit3 -= 3;
+  EXPECT_EQ(*rit3, 4);
+  rit1--;
+  EXPECT_EQ(*rit1, 5);
+  rit1++;
+  EXPECT_EQ(*rit1, 4);
+  rit3++;
+  EXPECT_EQ(*rit3, 3);
+  rit3--;
+  EXPECT_EQ(*rit3, 4);
+}

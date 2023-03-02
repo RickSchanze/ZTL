@@ -103,6 +103,22 @@ prev(Iter it, typename std::iterator_traits<Iter>::difference_type n = 1) {
   return it;
 }
 
+/*
+ * 反向迭代器适配器，举个例子
+ * 对于正向vector:
+ * [    1    2    3    4    5    6    ]
+ * 假如目前vector的迭代器在这里
+ * [    1    2    3    4    5    6    ]
+ *                     ^it
+ * 则拿迭代器it来初始化一个反向迭代器的话，它的current会在这里
+ * [    1    2    3    4    5    6    ]
+ *                     ^current
+ * 而反向迭代器实际所指的位置（记为rit）与current的关系，在正向迭代器的角度来看，
+ * 其实是*rit = *(current - 1)
+ * 即
+ * [    1    2    3    4    5    6    ]
+ *                ^rit ^current
+ */
 template <class Iter>
 class reverse_iterator {
   static_assert(std::bidirectional_iterator<Iter>);
@@ -115,24 +131,74 @@ public:
   using difference_type = typename std::iterator_traits<Iter>::difference_type;
   using pointer         = typename std::iterator_traits<Iter>::pointer;
   using reference       = typename std::iterator_traits<Iter>::reference;
+
   constexpr reverse_iterator() = default;
   constexpr explicit reverse_iterator(iterator_type x) {
-    current = std::move(x);
+    current_ = std::move(x);
   }
   constexpr reverse_iterator(const reverse_iterator& other)
-      : current(other.base()) {}
+      : current_(other.base()) {}
 
   constexpr reverse_iterator& operator=(const reverse_iterator& other) {
-    current = other.base();
+    current_ = other.base();
     return *this;
   }
 
-  // TODO: 各种reverse_iterator适配器的方法实现
-  constexpr iterator_type base() const { return current; }
+  constexpr iterator_type base() const { return current_; }
+  constexpr reference operator*() const {
+    auto tmp = current_;
+    return *--tmp;
+  }
+  constexpr pointer operator->() const { return &(operator*()); }
+
+  // 标准双向迭代器约束并未提供[]的约束，因此要使用这个需要本身就有[]操作
+  constexpr value_type operator[](difference_type n) const {
+    return *(*this + n);
+  }
+  reverse_iterator& operator++() {
+    --current_;
+    return *this;
+  }
+  reverse_iterator operator++(int) {
+    reverse_iterator tmp = *this;
+    --current_;
+    return tmp;
+  }
+  reverse_iterator& operator--() {
+    ++current_;
+    return *this;
+  }
+  reverse_iterator operator--(int) {
+    reverse_iterator tmp = *this;
+    ++current_;
+    return tmp;
+  }
+  reverse_iterator operator+(difference_type n) const {
+    auto temp = current_;
+    ztl::advance(temp, -n);
+    return reverse_iterator(temp);
+  }
+  reverse_iterator& operator+=(difference_type n) {
+    ztl::advance(current_, -n);
+    return *this;
+  }
+  reverse_iterator operator-(difference_type n) const {
+    auto temp = current_;
+    ztl::advance(temp, n);
+    return reverse_iterator(temp);
+  }
+  reverse_iterator& operator-=(difference_type n) {
+    ztl::advance(current_, n);
+    return *this;
+  }
 
 private:
-  iterator_type current;
+  // 这是个底层迭代器
+  // see https://zh.cppreference.com/w/cpp/iterator/reverse_iterator/base
+  iterator_type current_;
 };
+
+// TODO: reverse_iter的各种比较函数
 
 reverse_iterator<std::vector<int, ztl::allocator<int>>::iterator> a{};
 } // namespace ztl
