@@ -1,8 +1,8 @@
-//
-// Created by 28150 on 2023/3/1.
-//
-
-// 此文件用于实现迭代器常用算法
+/**
+ * Created by 28150 on 2023/3/1.
+ * 此文件用于实现迭代器常用算法
+ * TODO: 对于基础类型的iterator适配
+ */
 
 #ifndef ZTL_SRC_INCLUDE_ITERATOR_H
 #define ZTL_SRC_INCLUDE_ITERATOR_H
@@ -192,14 +192,43 @@ public:
     return *this;
   }
 
+  /**
+   * 由于暂未理解为什么要把两个iterator_type的类型进行比较，因此
+   * 先设为只允许同一类型
+   */
+  template <class RIter>
+  friend std::partial_ordering operator<=>(const reverse_iterator<RIter>& lhs,
+                                           const reverse_iterator<RIter>& rhs);
+
+  template <class RIter>
+  friend bool operator==(const reverse_iterator<RIter>& lhs,
+                         const reverse_iterator<RIter>& rhs);
+
 private:
   // 这是个底层迭代器
   // see https://zh.cppreference.com/w/cpp/iterator/reverse_iterator/base
   iterator_type current_;
 };
 
-// TODO: reverse_iter的各种比较函数
+/**
+ * 本来是反向的
+ * 再反向一次成正向的了
+ * 因此使用rhs <=> lhs
+ * @tparam RIter
+ * @param lhs
+ * @param rhs
+ * @return
+ */
+template <class RIter>
+std::partial_ordering operator<=>(const reverse_iterator<RIter>& lhs,
+                                  const reverse_iterator<RIter>& rhs) {
+  return rhs.current_ <=> lhs.current_;
+}
 
-reverse_iterator<std::vector<int, ztl::allocator<int>>::iterator> a{};
+template <class RIter>
+bool operator==(const reverse_iterator<RIter>& lhs,
+                const reverse_iterator<RIter>& rhs) {
+  return rhs.current_ == lhs.current_;
+}
 } // namespace ztl
 #endif // ZTL_SRC_INCLUDE_ITERATOR_H

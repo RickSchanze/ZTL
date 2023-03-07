@@ -13,7 +13,8 @@ struct allocator {
   using value_type      = T;
   using size_type       = std::size_t;
   using difference_type = std::ptrdiff_t;
-  using pointer         = T*;
+  using pointer         = value_type*;
+  using const_pointer   = const value_type*;
 
   constexpr value_type* allocate(size_type n) {
     return static_cast<value_type*>(std::malloc(n * sizeof(T)));
@@ -32,6 +33,7 @@ struct allocator_traits {
   using value_type     = typename allocator_type::value_type;
   using pointer        = typename allocator_type::pointer;
   using size_type      = typename allocator_type::size_type;
+  using const_pointer  = typename allocator_type::const_pointer;
 
   [[nodiscard]] static constexpr pointer allocate(allocator_type& a,
                                                   size_type n) {

@@ -84,3 +84,32 @@ TEST(TestReverseIterator, TestMathOperation) {
   rit3--;
   EXPECT_EQ(*rit3, 4);
 }
+
+TEST(TestReverseIterator, TestLogicOperation) {
+  std::vector vec{1, 2, 3, 4, 5, 6};
+  auto iter = vec.end();
+  ztl::reverse_iterator rit1{iter};
+  ztl::reverse_iterator rit2{iter};
+  EXPECT_TRUE(rit1 == rit2);
+  EXPECT_FALSE(rit1 != rit2);
+  EXPECT_FALSE(rit1 < rit2);
+  EXPECT_TRUE(rit1 <= rit2);
+  EXPECT_FALSE(rit1 > rit2);
+  EXPECT_TRUE(rit1 >= rit2);
+  rit2++;
+  EXPECT_FALSE(rit1 == rit2);
+  EXPECT_TRUE(rit1 != rit2);
+  EXPECT_TRUE(rit1 < rit2);
+  EXPECT_TRUE(rit1 <= rit2);
+  EXPECT_FALSE(rit1 > rit2);
+  EXPECT_FALSE(rit1 >= rit2);
+  rit1 = ztl::reverse_iterator{iter};
+  rit2 = ztl::reverse_iterator{iter};
+  rit1++;
+  EXPECT_FALSE(rit1 == rit2);
+  EXPECT_TRUE(rit1 != rit2);
+  EXPECT_FALSE(rit1 < rit2);
+  EXPECT_FALSE(rit1 <= rit2);
+  EXPECT_TRUE(rit1 > rit2);
+  EXPECT_TRUE(rit1 >= rit2);
+}
